@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+    <title>Hello, world!</title>
+  </head>
+  <body>
+
+
+    <div class="well text-centre">
+        <h4><span class="Chat"></span> Chat application</h4>
+    </div>
+    <div class="row">
+        <div class="col-sm-1"></div>
+    <div class="col-sm-7">
+    <div id="nomsg">
+        <h1 style="color: #acc"> No message found yet</h1>
+
+    </div>
+    <div id="message_holder">  </div>
+
+    </div>
+    <div class="col-sm-4">
+        <form action="" message="POST">
+            <b> Type your message below</b>
+            <div class="form-group">
+    <label for="exampleInputEmail1">Username</label>
+    <input type="text" class="username form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Username">
+    <small id="emailHelp" class="form-text text-muted">Enter a valid name noob.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Message</label>
+    <input type="text" class="message form-control" id="exampleInputPassword1" placeholder="Message">
+  </div>
+
+  <button type="button" class="btn btn-primary" onclick="myFunction()"> <span class="glyphicon glyphicon-send"></span> Send </button>
+
+        </form>
+        </div>
+        </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src ="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
+  <script>
+
+  var socket = io.connect('http://172.16.18.18:5000/',{origins:['*']})
+
+      socket.on('connect', function(){
+      socket.emit('my event',{
+      data : 'user connected'})})
+    function myFunction() {
+
+      var x = document.getElementById("exampleInputEmail1").value;
+      var text = document.getElementById("exampleInputPassword1").value;
+      socket.emit('my event',{
+      user : x,
+      message : text})
+     console.log(x);
+     console.log(text);
+     document.getElementById("exampleInputPassword1").value = " ";
+     }
+      socket.on('my response', function(msg){
+      if(typeof msg.user !== 'undefined' ){
+      if(document.getElementById("nomsg") !== null){
+      document.getElementById("nomsg").remove()}
+      let bold = document.createElement("b")
+      var date = new Date();
+      var n = date.toDateString();
+      var time = date.toLocaleTimeString();
+      console.log(time)
+      console.log(n)
+      document.getElementById("message_holder").innerHTML +="<h3>" + "<b>" + msg.user + "</b>" + "    :  " + msg.message +  "</h3>" + time + n +"<br>"
+
+      }
+      console.log(msg)})
+</script>
+
+  </body>
+</html>
